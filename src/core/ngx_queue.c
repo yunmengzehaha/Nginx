@@ -27,6 +27,7 @@ ngx_queue_middle(ngx_queue_t *queue)
 
     next = ngx_queue_head(queue);
 
+    // 快慢指针法寻找链表的中间节点
     for ( ;; ) {
         middle = ngx_queue_next(middle);
 
@@ -58,6 +59,8 @@ ngx_queue_sort(ngx_queue_t *queue,
     if (q == ngx_queue_last(queue)) {
         return;
     }
+
+    // 链表的插入排序
 
     for (q = ngx_queue_next(q); q != ngx_queue_sentinel(queue); q = next) {
 
