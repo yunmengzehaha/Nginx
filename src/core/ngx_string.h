@@ -24,6 +24,7 @@ typedef struct {
     ngx_str_t   value;
 } ngx_keyval_t;
 
+// 所有的整形变量刚好占用32位
 
 typedef struct {
     unsigned    len:28;
@@ -43,8 +44,9 @@ typedef struct {
     (str)->len = sizeof(text) - 1; (str)->data = (u_char *) text
 #define ngx_str_null(str)   (str)->len = 0; (str)->data = NULL
 
-
+// 由于大写字母的范围为65~90, 65的二进制位1000001, 32的二进制位100000, 大写字母加32和与0x20异或是等价的，加快了运算效率，妙啊
 #define ngx_tolower(c)      (u_char) ((c >= 'A' && c <= 'Z') ? (c | 0x20) : c)
+// 由于小写字母从97开始， 所以字母的二进制表示中32肯定是1，小写字母减32和与~0x20与是等价的，与运算效率更高。美哉，美哉，美哉！
 #define ngx_toupper(c)      (u_char) ((c >= 'a' && c <= 'z') ? (c & ~0x20) : c)
 
 void ngx_strlow(u_char *dst, u_char *src, size_t n);
@@ -57,6 +59,7 @@ void ngx_strlow(u_char *dst, u_char *src, size_t n);
 #define ngx_strcmp(s1, s2)  strcmp((const char *) s1, (const char *) s2)
 
 
+// 返回s2在s1中第一次出现的位置
 #define ngx_strstr(s1, s2)  strstr((const char *) s1, (const char *) s2)
 #define ngx_strlen(s)       strlen((const char *) s)
 
@@ -228,7 +231,7 @@ void ngx_sort(void *base, size_t n, size_t size,
     ngx_int_t (*cmp)(const void *, const void *));
 #define ngx_qsort             qsort
 
-
+// 一个#把宏参数变为字符串
 #define ngx_value_helper(n)   #n
 #define ngx_value(n)          ngx_value_helper(n)
 

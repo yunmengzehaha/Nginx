@@ -16,7 +16,7 @@ static void ngx_encode_base64_internal(ngx_str_t *dst, ngx_str_t *src,
 static ngx_int_t ngx_decode_base64_internal(ngx_str_t *dst, ngx_str_t *src,
     const u_char *basis);
 
-
+// 将字符串转为小写
 void
 ngx_strlow(u_char *dst, u_char *src, size_t n)
 {
@@ -29,6 +29,7 @@ ngx_strlow(u_char *dst, u_char *src, size_t n)
 }
 
 
+// 字符串长度计数， 大于n按n计数
 size_t
 ngx_strnlen(u_char *p, size_t n)
 {
@@ -533,7 +534,7 @@ ngx_sprintf_num(u_char *buf, u_char *last, uint64_t ui64, u_char zero,
 
         } else {
             do {
-                *--p = (u_char) (ui64 % 10 + '0');
+                *--p = (u_char) (ui64 % 10 + '0');  // 将数字转化为字符串的方法，非常简洁
             } while (ui64 /= 10);
         }
 
@@ -796,7 +797,7 @@ ngx_rstrncasecmp(u_char *s1, u_char *s2, size_t n)
 
     for ( ;; ) {
         c1 = s1[n];
-        if (c1 >= 'a' && c1 <= 'z') {
+        if (c1 >= 'a' && c1 <= 'z') { // 这个地方为什么不用位运算提高运算效率
             c1 -= 'a' - 'A';
         }
 
@@ -1127,7 +1128,7 @@ ngx_hex_dump(u_char *dst, u_char *src, size_t len)
 
     while (len--) {
         *dst++ = hex[*src >> 4];
-        *dst++ = hex[*src++ & 0xf];
+        *dst++ = hex[*src++ & 0xf];                            // src中的字符和0xf与的结果是低四位，即除以16的余数。
     }
 
     return dst;
@@ -1992,6 +1993,8 @@ ngx_sort(void *base, size_t n, size_t size,
     if (p == NULL) {
         return;
     }
+
+    // 字符串的插入排序，排序的单位是长度为size的字符串
 
     for (p1 = (u_char *) base + size;
          p1 < (u_char *) base + n * size;
