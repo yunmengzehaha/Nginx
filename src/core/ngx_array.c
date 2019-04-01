@@ -27,6 +27,7 @@ ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size)
 }
 
 
+// 删除就是移动内存池的指针
 void
 ngx_array_destroy(ngx_array_t *a)
 {
@@ -43,7 +44,7 @@ ngx_array_destroy(ngx_array_t *a)
     }
 }
 
-
+// 数组中加入新的元素，如果内存池空间不够就新分配原数组两倍大小的空间，然后把原数组的内容复制过去
 void *
 ngx_array_push(ngx_array_t *a)
 {
